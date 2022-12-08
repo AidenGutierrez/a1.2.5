@@ -1,8 +1,9 @@
 import turtle as trtl
 import time
+import random as rand
 #initializes the background screen
 wn = trtl.Screen()
-wn.bgcolor("black")
+wn.screensize(canvwidth=600,canvheight=600)
 wn.bgpic("PakistanFlag.gif")
 #creates the list of family members 
 familyNamesList = []
@@ -30,13 +31,14 @@ writer.clear()
 #draws the screen for the player to play on
 wn.bgpic("nopic")
 wn.bgcolor("brown")
+#creates the variables for the stick figures
 legLength = 40
 armLength = 20
 bodyLength = 60
 HeadSize = 40
 xcor = -100
 color = "black"
-#draws each stick figure in different locations
+#prepares the drawer turtle and it's attributes
 painter = trtl.Turtle()
 painter.hideturtle()
 painter.speed(0)
@@ -69,9 +71,69 @@ for people in range(3):
     painter.forward(armLength)
     painter.back(armLength*2)
     xcor += 100
+#sets up a timer and score countrer from the a1.2.1
+score = 0
+timer = 10
+counter_interval = 1000   #1000 represents 1 second
+timer_up = False
+font_setup = ("Arial", 20, "normal")
 
+#countdown turtle and function
+counter =  trtl.Turtle()
+counter.penup()
+counter.hideturtle()
+counter.goto(-250,250)
+def countdown():
+    global timer, timer_up
+    counter.clear() # clears what was previously written
+    if timer <= 0: #makes timer up true so the counter stops counting
+        counter.write("Time's Up", font=font_setup)
+        timer_up = True
+    else: #decreases and writes the timer
+        counter.write("Timer: " + str(timer), font=font_setup)
+        timer -= 1
+        counter.getscreen().ontimer(countdown, counter_interval) 
 
-
-
+#makes the score
+score_writer = trtl.Turtle()
+score_writer.penup()
+score_writer.hideturtle()
+score_writer.goto(250,250)
+#updates the score function
+def update_score():
+    global score
+    score += 1
+    score_writer.clear()
+    score_writer.write(score, font=font_setup)
+#creates the variables for the turtles
+spot = trtl.Turtle()
+spot.penup()
+spot_color = "blue"
+spot_size = 2
+spot_shape = "turtle" 
+spot.fillcolor(spot_color)
+spot.shapesize(spot_size)
+spot.shape(spot_shape)
+#creates the spots new positions
+def change_position():
+        #creates the variables for the turtle to go to a random 
+        #spot but away from the stickfigure
+    negativeXPos = rand.randint(-400, -150)
+    positiveXPos = rand.randint(150,400)
+    new_xpos= rand.choice(negativeXPos,positiveXPos)
+    new_ypos = rand.randint(-200,200)
+    spot.goto(new_xpos, new_ypos)
+#creates the fuction to call all other functions when spot is clicked
+#return how far away the turtle was before clicked
+def spot_clicked(x, y):
+    if timer_up != True:
+        update_score()
+        change_position()
+    else:
+        spot.hideturtle()
+#action for when spot is clicked
+spot.onclick(spot_clicked)
+#countdown call
+wn.ontimer(countdown, counter_interval)
 
 wn.mainloop()
