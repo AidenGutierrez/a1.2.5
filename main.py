@@ -5,6 +5,8 @@ import random as rand
 wn = trtl.Screen()
 wn.screensize(canvwidth=600,canvheight=600)
 wn.bgpic("PakistanFlag.gif")
+#objective number 
+objectiveNumber = 8
 #creates the list of family members 
 familyNamesList = []
 for i in range (2):
@@ -15,7 +17,7 @@ writer = trtl.Turtle()
 writer.color("red")
 writer.hideturtle()
 writer.penup()
-writer.goto(-450,100)
+writer.goto(-300,100)
 #writes the users objective
 writer.write('''Your goal is to reach 
 Pakistan with your family:
@@ -25,7 +27,8 @@ time.sleep(3)
 writer.clear()
 #gives the user the objective for the minigame
 writer.write('''Protect you and your family \nfrom the turtles for 10 seconds, 
-\nyou must eliminate at least 15 \nturtles to keep your family alive!''',font=("Arial",30,'bold'))
+\nyou must eliminate at least ''' + str(objectiveNumber) + ''' 
+\nturtles to keep your family alive!''',font=("Arial",30,'bold'))
 time.sleep(4)
 writer.clear()
 #draws the screen for the player to play on
@@ -84,15 +87,22 @@ counter.penup()
 counter.hideturtle()
 counter.goto(-250,250)
 def countdown():
-    global timer, timer_up
+    global timer, timer_up,spot
     counter.clear() # clears what was previously written
     if timer <= 0: #makes timer up true so the counter stops counting
         counter.write("Time's Up", font=font_setup)
         timer_up = True
+        #CHECKS IF THE USER HAS LOST
+        if timer_up and score<objectiveNumber:
+            wn.bgcolor("white")
+            painter.clear()
+            writer.goto(0,0)
+            writer.write("you lose!",font=font_setup)
     else: #decreases and writes the timer
         counter.write("Timer: " + str(timer), font=font_setup)
         timer -= 1
         counter.getscreen().ontimer(countdown, counter_interval) 
+        spot.forward(40)
 
 #makes the score
 score_writer = trtl.Turtle()
@@ -108,6 +118,7 @@ def update_score():
 #creates the variables for the turtles
 spot = trtl.Turtle()
 spot.penup()
+spot.goto(100,100)
 spot_color = "blue"
 spot_size = 2
 spot_shape = "turtle" 
@@ -118,11 +129,15 @@ spot.shape(spot_shape)
 def change_position():
         #creates the variables for the turtle to go to a random 
         #spot but away from the stickfigure
-    negativeXPos = rand.randint(-400, -150)
-    positiveXPos = rand.randint(150,400)
-    new_xpos= rand.choice(negativeXPos,positiveXPos)
+    new_xpos= rand.randint(-200,200)
     new_ypos = rand.randint(-200,200)
+    spot.hideturtle()
     spot.goto(new_xpos, new_ypos)
+    if spot.ycor() < 0:
+        spot.setheading(90)
+    else: 
+        spot.setheading(270)
+    spot.showturtle()
 #creates the fuction to call all other functions when spot is clicked
 #return how far away the turtle was before clicked
 def spot_clicked(x, y):
@@ -131,9 +146,19 @@ def spot_clicked(x, y):
         change_position()
     else:
         spot.hideturtle()
+#creates the kill function
+
+def kill(familylist):
+    index = rand.randint(0,len(familylist))
+    
+
+    killed = familylist[index] 
+    return killed
 #action for when spot is clicked
 spot.onclick(spot_clicked)
 #countdown call
 wn.ontimer(countdown, counter_interval)
+#checks if the user has lost
+
 
 wn.mainloop()
