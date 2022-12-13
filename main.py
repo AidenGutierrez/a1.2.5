@@ -92,12 +92,19 @@ def countdown():
     if timer <= 0: #makes timer up true so the counter stops counting
         counter.write("Time's Up", font=font_setup)
         timer_up = True
+        spot.hideturtle()
         #CHECKS IF THE USER HAS LOST
-        if timer_up and score<objectiveNumber:
+        if score < objectiveNumber:
+            wn.bgcolor("white")
+            painter.clear()
+            writer.goto(-200,0)
+            writer.write("you lose! and your family member: " + kill(familyNamesList) + '''
+            Has died.''',font=font_setup)
+        else:
             wn.bgcolor("white")
             painter.clear()
             writer.goto(0,0)
-            writer.write("you lose!",font=font_setup)
+            writer.write("You Win", font=font_setup)
     else: #decreases and writes the timer
         counter.write("Timer: " + str(timer), font=font_setup)
         timer -= 1
@@ -119,10 +126,10 @@ def update_score():
 spot = trtl.Turtle()
 spot.penup()
 spot.goto(100,100)
-spot_color = "blue"
-spot_size = 2
+spot_color = ["blue","white","black","green"]
+spot_size = rand.randint(2,4)
 spot_shape = "turtle" 
-spot.fillcolor(spot_color)
+spot.fillcolor(rand.choice(spot_color))
 spot.shapesize(spot_size)
 spot.shape(spot_shape)
 #creates the spots new positions
@@ -143,15 +150,21 @@ def change_position():
 def spot_clicked(x, y):
     if timer_up != True:
         update_score()
+        spot.stamp()
         change_position()
+        #spot variables change
+        spot_color = ["blue","white","black","green"]
+        spot_size = rand.randint(2,4)
+        spot_shape = "turtle" 
+        spot.fillcolor(rand.choice(spot_color))
+        spot.shapesize(spot_size)
+        spot.shape(spot_shape)      
     else:
         spot.hideturtle()
 #creates the kill function
 
 def kill(familylist):
-    index = rand.randint(0,len(familylist))
-    
-
+    index = rand.randint(0,1)
     killed = familylist[index] 
     return killed
 #action for when spot is clicked
