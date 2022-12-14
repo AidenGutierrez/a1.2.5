@@ -6,7 +6,7 @@ wn = trtl.Screen()
 wn.screensize(canvwidth=600,canvheight=600)
 wn.bgpic("PakistanFlag.gif")
 #objective number 
-objectiveNumber = 8
+objectiveNumber = 3
 #creates the list of family members 
 familyNamesList = []
 for i in range (2):
@@ -103,7 +103,7 @@ def countdown():
             writer.goto(-200,0)
             writer.write("you lose! and your family member: " + kill(familyNamesList) + '''
             Has died.''',font=font_setup)
-            time.sleep(2)
+            time.sleep(3)
             writer.clear()
             writer.write("better luck next time!", font=font_setup)
             time.sleep(3)
@@ -111,10 +111,11 @@ def countdown():
         #User Has Won
         else:
             wn.bgcolor("white")
+            wn.bgpic("PakistanFlag.gif")
             painter.clear()
-            writer.goto(-50,0)
-            writer.write("You Win!", font=font_setup)
-            time.sleep(3)
+            writer.goto(-150,0)
+            writer.write("You Win! Pakistan reached safely!", font=font_setup)
+            time.sleep(4)
             exit()
 
     else: #decreases and writes the timer
@@ -122,16 +123,17 @@ def countdown():
         timer -= 1
         counter.getscreen().ontimer(countdown, counter_interval)
         #moves the turtle
-        if spot.ypos()>300:
+        if spot.ycor()>250:
             spot.setheading(270)
-        elif spot.ypos() <-100:
+        elif spot.ycor() <-100:
             spot.setheading(90)
-        else:
-            if spot.xcor() < -100:
-                spot.setheading(0)
-            elif spot.xcor() > 200:
-                spot.setheading(180)
-        spot.forward(40)
+        elif spot.xcor() < -200:
+            spot.setheading(0)
+        elif spot.xcor() > 250:
+            spot.setheading(180)
+        elif spot.xcor() > -200 and spot.xcor() < 250 and spot.ycor() >-100 and spot.ycor() <200:
+            timer = 0
+        spot.forward(100)
         #checks where the turtle is
 
 
@@ -149,7 +151,8 @@ def update_score():
 #creates the variables for the turtles
 spot = trtl.Turtle()
 spot.penup()
-spot.goto(100,100)
+spot.goto(0,350)
+spot.setheading(270)
 spot_color = ["blue","white","black","green"]
 spot_size = rand.randint(2,4)
 spot_shape = "turtle" 
@@ -167,8 +170,8 @@ def change_position():
     new_xposlist.append(posXPos)
     new_xpos = new_xposlist.pop(rand.randint(0,1))
     #makes sure spot spawns on a different y than the stickfigures
-    negYPos = rand.randint(-350,-100)
-    posYPos = rand.randint(200,350)
+    negYPos = rand.randint(-300,-100)
+    posYPos = rand.randint(250,330)
     newyposlist = []
     newyposlist.append(negYPos)
     newyposlist.append(posYPos)
@@ -205,5 +208,4 @@ wn.ontimer(countdown, counter_interval)
 
     
 
-wn.mainloop()
 wn.mainloop()
