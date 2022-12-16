@@ -6,7 +6,7 @@ wn = trtl.Screen()
 wn.screensize(canvwidth=600,canvheight=600)
 wn.bgpic("PakistanFlag.gif")
 #objective number 
-objectiveNumber = 3
+objectiveNumber = 6
 #creates the list of family members 
 familyNamesList = []
 for i in range (2):
